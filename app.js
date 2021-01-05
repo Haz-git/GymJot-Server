@@ -1,8 +1,9 @@
 //Dependencies:
 const express = require('express');
-const cors = require('cors');
+const userRouter = require('./routes/userRouter');
 
 //Security Dependencies:
+const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
@@ -45,6 +46,7 @@ app.use(hpp());
 const allowedDomains = [
     'https://barbellbuilder.netlify.app',
     'http://localhost:3000',
+    'https://dark-station-193740.postman.co',
 ];
 
 app.use(
@@ -79,6 +81,7 @@ app.use(function (req, res, next) {
 });
 
 //Main Routes:
+app.use('/api/user', userRouter);
 
 //Global Error Handler -- This should catch requests passing this area.
 
