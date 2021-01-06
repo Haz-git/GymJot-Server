@@ -9,6 +9,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const passport = require('passport');
 
 //Creating Express application object:
 const app = express();
@@ -66,6 +67,8 @@ app.use(
     })
 );
 
+//CORs headers
+
 app.use(function (req, res, next) {
     res.header('Content-Type', 'application/json;charset=UTF-8');
     res.header('Access-Control-Allow-Credentials', true);
@@ -79,6 +82,10 @@ app.use(function (req, res, next) {
     });
     next();
 });
+
+//Initialize passport:
+app.use(passport.initialize());
+require('./services/passport/config')(passport);
 
 //Main Routes:
 app.use('/api/user', userRouter);
