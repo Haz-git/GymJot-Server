@@ -94,7 +94,7 @@ userSchema.methods.comparePasswords = async function (
 
 //Generates a JWT:
 userSchema.methods.generateVerificationJWT = function () {
-    const expiration = '10d';
+    const expiration = '1d';
 
     const signedToken = jwt.sign({ id: this._id }, JWTSECRET, {
         expiresIn: expiration, //1 Min expiration for testing purposes.
