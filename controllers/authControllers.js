@@ -15,7 +15,7 @@ exports.testController = (req, res, next) => {
 
 exports.signup = handleAsync(async (req, res, next) => {
     //Extracting user data from request object:
-
+    console.log('Signup request');
     const {
         firstName,
         lastName,
@@ -47,7 +47,7 @@ exports.signup = handleAsync(async (req, res, next) => {
 
 exports.login = handleAsync(async (req, res, next) => {
     //Destructure credentials from request object:
-
+    console.log('Login attempt');
     const { email, password } = req.body;
 
     //Finding user in database based on email:
