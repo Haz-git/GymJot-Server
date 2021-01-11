@@ -30,7 +30,7 @@ app.use('/api', limiter);
 
 //JSON: Added limiter to reduce DDOS
 app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 //Data Sanitization: noSQL query injection
 app.use(mongoSanitize());
@@ -48,6 +48,7 @@ const allowedDomains = [
     'https://barbellbuilder.netlify.app',
     'http://localhost:3000',
     'https://dark-station-193740.postman.co',
+    'http://127.0.0.1',
 ];
 
 app.use(

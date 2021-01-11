@@ -9,7 +9,7 @@ dotenv.config({
 });
 
 //Initializing PORT:
-const PORT = 7467;
+const PORT = process.env.PORT || 7467;
 
 //Creating server
 const server = require('http').createServer(app);
