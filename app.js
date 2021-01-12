@@ -3,6 +3,7 @@ const express = require('express');
 const userRouter = require('./routes/userRouter');
 
 //Security Dependencies:
+const bodyParser = require('body-parser');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
@@ -31,6 +32,10 @@ app.use('/api', limiter);
 //JSON: Added limiter to reduce DDOS
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+//Body-parser:
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //Data Sanitization: noSQL query injection
 app.use(mongoSanitize());
