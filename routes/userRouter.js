@@ -7,7 +7,6 @@ const passport = require('passport');
 
 //Controllers:
 const authController = require('../controllers/authControllers');
-const userDetailControllers = require('../controllers/userDetailControllers');
 
 //Authentication Routes:
 router.route('/signup').post(authController.signup);
@@ -19,14 +18,6 @@ router
     .get(
         passport.authenticate('jwt', { session: false }),
         authController.testController
-    );
-
-//Initial Route to load user data:
-router
-    .route('/getUserData')
-    .get(
-        passport.authenticate('jwt', { session: false }),
-        userDetailControllers.getUserData
     );
 
 module.exports = router;
