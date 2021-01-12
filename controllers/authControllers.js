@@ -47,7 +47,6 @@ exports.signup = handleAsync(async (req, res, next) => {
 
 exports.login = handleAsync(async (req, res, next) => {
     //Destructure credentials from request object:
-    console.log('Login attempt');
     const { email, password } = req.body;
 
     //Finding user in database based on email:
@@ -76,6 +75,7 @@ exports.login = handleAsync(async (req, res, next) => {
                             status: 'Success',
                             token: tokenObject.token,
                             expiresIn: tokenObject.expires,
+                            _id: user._id,
                         });
                     } else {
                         //isValid is false, send error:
