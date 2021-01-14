@@ -6,18 +6,55 @@ const router = express.Router();
 const passport = require('passport');
 
 //Controllers:
-const authController = require('../controllers/authControllers');
+const authControllers = require('../controllers/authControllers');
+const mainStatControllers = require('../controllers/mainStatControllers');
 
 //Authentication Routes:
-router.route('/signup').post(authController.signup);
-router.route('/login').post(authController.login);
+router.route('/signup').post(authControllers.signup);
+router.route('/login').post(authControllers.login);
 
 //Test protected route: -- We are testing JWT expiration and access.
 router
     .route('/protected')
     .get(
         passport.authenticate('jwt', { session: false }),
-        authController.testController
+        authControllers.testController
+    );
+
+//Main Powerlifting Stats Routes:
+
+router
+    .route('/getMainPLStats')
+    .get(
+        passport.authenticate('jwt', { session: false }),
+        mainStatControllers.getMainPLStats
+    );
+
+//Add new bench:
+
+router
+    .route('/addnewbench')
+    .post(
+        passport.authenticate('jwt', { session: false }),
+        mainStatControllers.addNewBench
+    );
+
+//Add new squat:
+
+router
+    .route('/addnewsquat')
+    .post(
+        passport.authenticate('jwt', { session: false }),
+        mainStatControllers.addNewSquat
+    );
+
+//Add new deadlift:
+
+router
+    .route('/addnewdeadlift')
+    .post(
+        passport.authenticate('jwt', { session: false }),
+        mainStatControllers.addNewDeadlift
     );
 
 module.exports = router;
