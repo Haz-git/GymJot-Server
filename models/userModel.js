@@ -71,6 +71,14 @@ const userSchema = new mongoose.Schema(
                 message: 'Your passwords do not match!',
             },
         },
+        userExistingPLStats: {
+            type: mongoose.Schema.Types.Mixed,
+            default: {
+                bench: 'NA',
+                squat: 'NA',
+                deadlift: 'NA',
+            },
+        },
     },
     { minimize: false }
 );
