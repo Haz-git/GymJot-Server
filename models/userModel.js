@@ -79,6 +79,30 @@ const userSchema = new mongoose.Schema(
                 deadlift: 'NA',
             },
         },
+        recentBenchWeightChange: {
+            type: mongoose.Schema.Types.Mixed,
+            default: {
+                updateTime: 'NA',
+                weightChange: 'NA',
+            },
+        },
+        recentSquatWeightChange: {
+            type: mongoose.Schema.Types.Mixed,
+            default: {
+                updateTime: 'NA',
+                weightChange: 'NA',
+            },
+        },
+        recentDeadliftWeightChange: {
+            type: mongoose.Schema.Types.Mixed,
+            default: {
+                updateTime: 'NA',
+                weightChange: 'NA',
+            },
+        },
+        userArchivedBenchStats: [],
+        userArchivedSquatStats: [],
+        userArchivedDeadliftStats: [],
     },
     { minimize: false }
 );
