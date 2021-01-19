@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+const dayjs = require('dayjs');
 const dotenv = require('dotenv');
+const { v4: uuid } = require('uuid');
 
 //Initializing dotenv:
 dotenv.config({
@@ -103,6 +104,7 @@ const userSchema = new mongoose.Schema(
         userArchivedBenchStats: [],
         userArchivedSquatStats: [],
         userArchivedDeadliftStats: [],
+        userSavedStats: [],
     },
     { minimize: false }
 );
@@ -155,6 +157,28 @@ userSchema.methods.toJSON = function () {
     delete userObj.password;
 
     return userObj;
+};
+
+//Generates a current date object:
+
+userSchema.methods.generateDateNow = function () {
+    const user = this;
+
+    return dayjs().format();
+};
+
+//Finds an object's index number in an array (This will be for accessing exerciseName + exerciseID):
+
+userSchema.methods.findExerciseIndex = function (exerciseId, array) {
+    let index = array.findIndex((object) => object.exerciseId === exerciseId);
+
+    return index;
+};
+
+//Generates a random UUIDv4:
+
+userSchema.methods.generateUuid = function () {
+    return uuid();
 };
 
 //Creating Model:
