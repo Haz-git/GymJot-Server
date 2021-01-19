@@ -61,6 +61,13 @@ router
 //Stat Input Routes \\\\\\\\\\\\\\\\:
 
 router
+    .route('/getallstats')
+    .get(
+        passport.authenticate('jwt', { session: false }),
+        statControllers.getAllStoredStats
+    );
+
+router
     .route('/addnewstat')
     .post(
         passport.authenticate('jwt', { session: false }),
