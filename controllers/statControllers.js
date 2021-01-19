@@ -7,6 +7,22 @@ const throwAppError = require('../util/throwAppError');
 
 //Controller Functions:
 
+//Get all existing Stats:
+
+exports.getAllStoredStats = handleAsync(async (req, res, next) => {
+    const { _id, email } = req.user;
+
+    await User.findOne({
+        _id: _id,
+        email: email,
+    }).then((user) => {
+        res.status(200).json({
+            message: 'Data grabbed successfully',
+            userSavedStats: user.userSavedStats,
+        });
+    });
+});
+
 //Post new stat record:
 exports.addNewRecord = handleAsync(async (req, res, next) => {
     res.status(200).json({
