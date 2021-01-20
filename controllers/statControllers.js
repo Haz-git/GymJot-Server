@@ -147,7 +147,7 @@ exports.addNewStat = handleAsync(async (req, res, next) => {
     );
 
     res.status(200).json({
-        message: 'Route has been successfully created',
+        message: 'Stat has successfully been added.',
         userSavedStats: updatedUser.userSavedStats,
     });
 });
