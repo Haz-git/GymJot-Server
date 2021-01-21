@@ -9,6 +9,7 @@ const throwAppError = require('../util/throwAppError');
 
 //Grabs a user's record data
 exports.getUserRecordData = handleAsync(async (req, res, next) => {
+    //Before designing this, check out the comment on addNewRecord. Maybe a redesign on just solely 'weights' and a lbs or kg selector will be better.
     res.status(200).json({
         message: 'This route grabs the user record data',
     });
@@ -16,9 +17,10 @@ exports.getUserRecordData = handleAsync(async (req, res, next) => {
 
 //Adds a new record to stat:
 exports.addNewRecord = handleAsync(async (req, res, next) => {
-    //Maybe instead of lbs or kg, add weight.
+    //Maybe instead of lbs or kg, add weight. We'll need to keep all the weights in the backend in lbs format, and generate a rendered kg to the frontend.
     const { _id, email } = req.user;
-    const { sets, reps, lbs, kgs, exerciseId } = req.body;
+    const { sets, reps, exerciseId } = req.body;
+    let { weight, unit } = req.body;
 
     //Find User
 
@@ -34,13 +36,17 @@ exports.addNewRecord = handleAsync(async (req, res, next) => {
         existingUser.userSavedStats
     );
 
+    //If weight is in Kgs, calculate to lbs for storage.
+    if (unit === 'Kgs') {
+        weight = (weight * 2.20462).toFixed(2);
+    }
+
     //Adding object to array:
 
     existingUser.userSavedStats[targetIndex].records.push({
         sets,
         reps,
-        lbs,
-        kgs,
+        weight,
         dateModified: existingUser.generateDateNow(),
         recordId: existingUser.generateUuid(),
     });
@@ -69,12 +75,33 @@ exports.addNewRecord = handleAsync(async (req, res, next) => {
 });
 
 exports.editRecord = handleAsync(async (req, res, next) => {
-    const { exerciseId, recordId, sets, reps, lbs, kgs } = req.body;
+    const { sets, reps, exerciseId, recordId } = req.body;
+    let { weight, unit } = req.body;
     const { _id, email } = req.user;
+
+    if (unit === 'Kgs') {
+        weight = (weight * 2.20462).toFixed(2);
+    }
+
+    //Check if any of the values are undefined. If they are undefined, then do not update the values --> This means that the user does not want to update that values.
+
+    let existingUser = await User.findOne({
+        _id: _id,
+        email: email,
+    });
+
+    const dateModified = existingUser.generateDateNow();
+
+    const editedRecord = existingUser.findAndEditRecord(exerciseId, recordId, {
+        sets,
+        reps,
+        weight,
+        dateModified,
+    });
 
     res.status(200).json({
         message: 'Record has successfully been added.',
-        // userSavedStats: updatedUser.userSavedStats,
+        userSavedStats: editedRecord,
     });
 });
 
