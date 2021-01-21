@@ -23,13 +23,6 @@ exports.getAllStoredStats = handleAsync(async (req, res, next) => {
     });
 });
 
-//Post new stat record:
-exports.addNewRecord = handleAsync(async (req, res, next) => {
-    res.status(200).json({
-        message: 'this route has been established',
-    });
-});
-
 //Edit existing Stat:
 exports.editExistingStat = handleAsync(async (req, res, next) => {
     const { exerciseId, newExerciseName } = req.body;
@@ -127,6 +120,7 @@ exports.addNewStat = handleAsync(async (req, res, next) => {
         exerciseName: exerciseName,
         dateUpdated: userExistingSavedStats.generateDateNow(),
         exerciseId: userExistingSavedStats.generateUuid(),
+        records: [],
     });
 
     //Update the user.
