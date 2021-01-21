@@ -162,8 +162,6 @@ userSchema.methods.toJSON = function () {
 //Generates a current date object:
 
 userSchema.methods.generateDateNow = function () {
-    const user = this;
-
     return dayjs().format();
 };
 
@@ -179,6 +177,33 @@ userSchema.methods.findExerciseIndex = function (exerciseId, array) {
 
 userSchema.methods.generateUuid = function () {
     return uuid();
+};
+
+//Loops through arguments, adding them to the desired user's record:
+
+userSchema.methods.findAndEditRecord = function (
+    exerciseId,
+    recordId,
+    editValues
+) {
+    const user = this;
+
+    const exerciseIndex = user.userSavedStats.findIndex(
+        (object) => object.exerciseId === exerciseId
+    );
+
+    const recordIndex = user.userSavedStats[exerciseIndex].records.findIndex(
+        (record) => record.recordId === recordId
+    );
+
+    for (const property in editValues) {
+        user.userSavedStats[exerciseIndex].records[recordIndex][`${property}`] =
+            editValues[property];
+    }
+
+    console.log(user.userSavedStats[exerciseIndex].records[recordIndex]);
+
+    return user.userSavedStats;
 };
 
 //Creating Model:
