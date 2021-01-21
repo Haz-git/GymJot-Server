@@ -9,6 +9,7 @@ const passport = require('passport');
 const authControllers = require('../controllers/authControllers');
 const mainStatControllers = require('../controllers/mainStatControllers');
 const statControllers = require('../controllers/statControllers');
+const recordControllers = require('../controllers/recordControllers');
 
 //Authentication Routes:
 router.route('/signup').post(authControllers.signup);
@@ -88,13 +89,34 @@ router
         statControllers.editExistingStat
     );
 
-//Stat records:
+//Stat Record Routes \\\\\\\\\\\\\\\\:
 
 router
-    .route('/stat/newrecord')
+    .route('/stat/getallrecords')
+    .get(
+        passport.authenticate('jwt', { session: false }),
+        recordControllers.getUserRecordData
+    );
+
+router
+    .route('/stat/addnewrecord')
     .post(
         passport.authenticate('jwt', { session: false }),
-        statControllers.addNewRecord
+        recordControllers.addNewRecord
+    );
+
+router
+    .route('/stat/editrecord')
+    .patch(
+        passport.authenticate('jwt', { session: false }),
+        recordControllers.editRecord
+    );
+
+router
+    .route('/stat/deleterecord')
+    .delete(
+        passport.authenticate('jwt', { session: false }),
+        recordControllers.deleteRecord
     );
 
 module.exports = router;
