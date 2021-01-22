@@ -109,8 +109,6 @@ exports.deleteRecord = handleAsync(async (req, res, next) => {
     const { exerciseId, recordId } = req.body;
     const { _id, email } = req.user;
 
-    console.log(exerciseId, recordId);
-
     let existingUser = await User.findOne({
         _id: _id,
         email: email,
