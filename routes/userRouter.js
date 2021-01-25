@@ -10,6 +10,7 @@ const authControllers = require('../controllers/authControllers');
 const mainStatControllers = require('../controllers/mainStatControllers');
 const statControllers = require('../controllers/statControllers');
 const recordControllers = require('../controllers/recordControllers');
+const programControllers = require('../controllers/programControllers');
 
 //Authentication Routes:
 router.route('/signup').post(authControllers.signup);
@@ -117,6 +118,15 @@ router
     .delete(
         passport.authenticate('jwt', { session: false }),
         recordControllers.deleteRecord
+    );
+
+//Main Programs Routes \\\\\\\\\\\\\\\\:
+
+router
+    .route('/programs')
+    .get(
+        passport.authenticate('jwt', { session: false }),
+        programControllers.getAllPrograms
     );
 
 module.exports = router;
