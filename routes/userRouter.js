@@ -174,4 +174,18 @@ router
         programExerciseControllers.addNewRestPeriod
     );
 
+router
+    .route('/programs/deleteprogramexercise')
+    .delete(
+        passport.authenticate('jwt', { session: false }),
+        programExerciseControllers.deleteProgramExercise
+    );
+
+router
+    .route('/programs/deleteprogramrestperiod')
+    .delete(
+        passport.authenticate('jwt', { session: false }),
+        programExerciseControllers.deleteRestPeriod
+    );
+
 module.exports = router;
