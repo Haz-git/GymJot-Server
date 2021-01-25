@@ -90,6 +90,58 @@ exports.addNewProgramExercise = handleAsync(async (req, res, next) => {
     });
 });
 
+//Controller function for deleting a program exercise:
+
+exports.deleteProgramExercise = handleAsync(async (req, res, next) => {
+    const { programId, programExerciseId } = req.body;
+    const { _id, email } = req.user;
+
+    let existingUser = await User.findOne({
+        _id: _id,
+        email: email,
+    });
+
+    const targetProgram = existingUser.findProgramIndex(
+        programId,
+        existingUser.userPrograms
+    );
+
+    //Find programExercise ID:
+
+    const targetProgramExercise = existingUser.findProgramExerciseIndex(
+        'programExerciseId',
+        programExerciseId,
+        existingUser.userPrograms[targetProgram].programExercises
+    );
+
+    existingUser.userPrograms[targetProgram].programExercises.splice(
+        targetProgramExercise,
+        1
+    );
+
+    //Update the user.
+
+    await User.updateOne(
+        { _id: _id, email: email },
+        { userPrograms: existingUser.userPrograms },
+        { bypassDocumentValidation: true },
+        (err) => {
+            if (err) console.log(err);
+        }
+    );
+
+    const updatedUser = await User.findOne({ _id: _id, email: email }).select(
+        'userPrograms'
+    );
+
+    res.status(200).json({
+        msg: 'Program exercise has been successfully deleted.',
+        userPrograms: updatedUser.userPrograms[targetProgram].programExercises,
+    });
+});
+
+//Controller function for adding a new rest period:
+
 exports.addNewRestPeriod = handleAsync(async (req, res, next) => {
     const { _id, email } = req.user;
     const { restLengthMinute, restLengthSecond, programId } = req.body;
@@ -128,5 +180,53 @@ exports.addNewRestPeriod = handleAsync(async (req, res, next) => {
         msg: 'Rest period has been added successfully.',
         userProgramExercise:
             updatedUser.userPrograms[programTargetIndex].programExercises,
+    });
+});
+
+//Controller function for removing a rest period:
+
+exports.deleteRestPeriod = handleAsync(async (req, res, next) => {
+    const { _id, email } = req.user;
+    const { programId, restId } = req.body;
+
+    let existingUser = await User.findOne({
+        _id: _id,
+        email: email,
+    });
+
+    const targetProgram = existingUser.findProgramIndex(
+        programId,
+        existingUser.userPrograms
+    );
+
+    //Find programExercise ID:
+
+    const targetProgramExercise = existingUser.findProgramExerciseIndex(
+        'restId',
+        restId,
+        existingUser.userPrograms[targetProgram].programExercises
+    );
+
+    existingUser.userPrograms[targetProgram].programExercises.splice(
+        targetProgramExercise,
+        1
+    );
+
+    await User.updateOne(
+        { _id: _id, email: email },
+        { userPrograms: existingUser.userPrograms },
+        { bypassDocumentValidation: true },
+        (err) => {
+            if (err) console.log(err);
+        }
+    );
+
+    const updatedUser = await User.findOne({ _id: _id, email: email }).select(
+        'userPrograms'
+    );
+
+    res.status(200).json({
+        msg: 'Rest exercise has been deleted',
+        userPrograms: updatedUser.userPrograms[targetProgram].programExercises,
     });
 });
