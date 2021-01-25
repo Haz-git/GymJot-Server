@@ -11,6 +11,7 @@ const mainStatControllers = require('../controllers/mainStatControllers');
 const statControllers = require('../controllers/statControllers');
 const recordControllers = require('../controllers/recordControllers');
 const programControllers = require('../controllers/programControllers');
+const programExerciseControllers = require('../controllers/programExerciseControllers');
 
 //Authentication Routes:
 router.route('/signup').post(authControllers.signup);
@@ -148,6 +149,22 @@ router
     .delete(
         passport.authenticate('jwt', { session: false }),
         programControllers.deleteExistingProgram
+    );
+
+//Program Exercise Routes (under programs) \\\\\\\\\\\\\\\\:
+
+router
+    .route('/programs/getprogramexercises')
+    .get(
+        passport.authenticate('jwt', { session: false }),
+        programExerciseControllers.getAllProgramExercises
+    );
+
+router
+    .route('/programs/addnewprogramexercise')
+    .post(
+        passport.authenticate('jwt', { session: false }),
+        programExerciseControllers.addNewProgramExercise
     );
 
 module.exports = router;
