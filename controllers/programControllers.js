@@ -22,3 +22,21 @@ exports.getAllPrograms = handleAsync(async (req, res, next) => {
         });
     });
 });
+
+exports.addNewProgram = handleAsync(async (req, res, next) => {
+    res.status(200).json({
+        msg: 'Add new program route established.',
+    });
+});
+
+exports.editExistingProgram = handleAsync(async (req, res, next) => {
+    res.status(200).json({
+        msg: 'Edit existing program route established.',
+    });
+});
+
+exports.deleteExistingProgram = handleAsync(async (req, res, next) => {
+    res.status(200).json({
+        msg: 'Delete existing program route established.',
+    });
+});
