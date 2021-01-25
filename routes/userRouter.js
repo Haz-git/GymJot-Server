@@ -129,4 +129,25 @@ router
         programControllers.getAllPrograms
     );
 
+router
+    .route('/addnewprogram')
+    .post(
+        passport.authenticate('jwt', { session: false }),
+        programControllers.addNewProgram
+    );
+
+router
+    .route('/editprogram')
+    .patch(
+        passport.authenticate('jwt', { session: false }),
+        programControllers.editExistingProgram
+    );
+
+router
+    .route('/deleteprogram')
+    .delete(
+        passport.authenticate('jwt', { session: false }),
+        programControllers.deleteExistingProgram
+    );
+
 module.exports = router;
