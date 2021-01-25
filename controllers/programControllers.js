@@ -56,19 +56,95 @@ exports.addNewProgram = handleAsync(async (req, res, next) => {
     );
 
     res.status(200).json({
-        msg: 'Add new program route established.',
+        msg: 'Program has been successfully added',
         userPrograms: updatedUser.userPrograms,
     });
 });
 
 exports.editExistingProgram = handleAsync(async (req, res, next) => {
+    //Should serve to edit name and description of the program.
+
+    const { programId, newProgramDesc, newProgramName } = req.body;
+    const { _id, email } = req.user;
+
+    console.log(newProgramName, newProgramDesc);
+
+    let existingUser = await User.findOne({
+        _id: _id,
+        email: email,
+    });
+
+    const programEditIndex = existingUser.findProgramIndex(
+        programId,
+        existingUser.userPrograms
+    );
+
+    console.log(programEditIndex);
+
+    if (newProgramDesc !== undefined && newProgramDesc !== '') {
+        existingUser.userPrograms[programEditIndex][
+            'programDesc'
+        ] = newProgramDesc;
+    }
+
+    if (newProgramName !== undefined && newProgramName !== '') {
+        existingUser.userPrograms[programEditIndex][
+            'programName'
+        ] = newProgramName;
+    }
+
+    await User.updateOne(
+        { _id: _id, email: email },
+        { userPrograms: existingUser.userPrograms },
+        { bypassDocumentValidation: true },
+        (err) => {
+            if (err) console.log(err);
+        }
+    );
+
+    const updatedUser = await User.findOne({ _id: _id, email: email }).select(
+        'userPrograms'
+    );
+
     res.status(200).json({
-        msg: 'Edit existing program route established.',
+        msg: 'Program name and description has successfully been edited.',
+        userPrograms: updatedUser.userPrograms,
     });
 });
 
 exports.deleteExistingProgram = handleAsync(async (req, res, next) => {
+    //Should serve to delete a program:
+
+    const { programId } = req.body;
+    const { _id, email } = req.user;
+
+    let existingUser = await User.findOne({
+        _id: _id,
+        email: email,
+    });
+
+    const deleteProgramIndex = existingUser.findProgramIndex(
+        programId,
+        existingUser.userPrograms
+    );
+
+    existingUser.userPrograms.splice(deleteProgramIndex, 1);
+
+    await User.updateOne(
+        { _id: _id, email: email },
+        { userPrograms: existingUser.userPrograms },
+        { bypassDocumentValidation: true },
+        (err) => {
+            if (err) console.log(err);
+        }
+    );
+
+    const updatedUser = await User.findOne({ _id: _id, email: email }).select(
+        'userPrograms'
+    );
+
     res.status(200).json({
-        msg: 'Delete existing program route established.',
+        msg: 'Program has been deleted successfully.',
+        userPrograms: updatedUser.userPrograms,
     });
 });
