@@ -174,6 +174,14 @@ userSchema.methods.findExerciseIndex = function (exerciseId, array) {
     return index;
 };
 
+//Finds the user's program index number in the program array:
+
+userSchema.methods.findProgramIndex = function (programId, array) {
+    const index = array.findIndex((object) => object.programId === programId);
+
+    return index;
+};
+
 //Generates a random UUIDv4:
 
 userSchema.methods.generateUuid = function () {
