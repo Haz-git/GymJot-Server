@@ -23,9 +23,41 @@ exports.getAllPrograms = handleAsync(async (req, res, next) => {
     });
 });
 
+//Adds a new program to the user's program list.
+
 exports.addNewProgram = handleAsync(async (req, res, next) => {
+    const { programName, programDesc } = req.body;
+    const { _id, email } = req.user;
+
+    let userExistingPrograms = await User.findOne({
+        _id: _id,
+        email: email,
+    }).select('userPrograms');
+
+    userExistingPrograms.userPrograms.push({
+        programName,
+        programDesc,
+        dateCreated: userExistingPrograms.generateDateNow(),
+        programId: userExistingPrograms.generateUuid(),
+        programExercises: [],
+    });
+
+    await User.updateOne(
+        { _id: _id, email: email },
+        { userPrograms: userExistingPrograms.userPrograms },
+        { bypassDocumentValidation: true },
+        (err) => {
+            if (err) console.log(err);
+        }
+    );
+
+    const updatedUser = await User.findOne({ _id: _id, email: email }).select(
+        'userPrograms'
+    );
+
     res.status(200).json({
         msg: 'Add new program route established.',
+        userPrograms: updatedUser.userPrograms,
     });
 });
 
