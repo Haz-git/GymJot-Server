@@ -105,6 +105,7 @@ const userSchema = new mongoose.Schema(
         userArchivedSquatStats: [],
         userArchivedDeadliftStats: [],
         userSavedStats: [],
+        userPrograms: [],
     },
     { minimize: false }
 );
