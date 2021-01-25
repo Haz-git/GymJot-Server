@@ -167,4 +167,11 @@ router
         programExerciseControllers.addNewProgramExercise
     );
 
+router
+    .route('/programs/addnewrestperiod')
+    .post(
+        passport.authenticate('jwt', { session: false }),
+        programExerciseControllers.addNewRestPeriod
+    );
+
 module.exports = router;

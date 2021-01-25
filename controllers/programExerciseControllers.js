@@ -89,3 +89,44 @@ exports.addNewProgramExercise = handleAsync(async (req, res, next) => {
             updatedUser.userPrograms[programTargetIndex].programExercises,
     });
 });
+
+exports.addNewRestPeriod = handleAsync(async (req, res, next) => {
+    const { _id, email } = req.user;
+    const { restLengthMinute, restLengthSecond, programId } = req.body;
+
+    let existingUser = await User.findOne({
+        _id: _id,
+        email: email,
+    });
+
+    const programTargetIndex = existingUser.findProgramIndex(
+        programId,
+        existingUser.userPrograms
+    );
+
+    existingUser.userPrograms[programTargetIndex].programExercises.push({
+        restLengthMinute,
+        restLengthSecond,
+        restId: existingUser.generateUuid(),
+        dateAdded: existingUser.generateDateNow(),
+    });
+
+    await User.updateOne(
+        { _id: _id, email: email },
+        { userPrograms: existingUser.userPrograms },
+        { bypassDocumentValidation: true },
+        (err) => {
+            if (err) console.log(err);
+        }
+    );
+
+    const updatedUser = await User.findOne({ _id: _id, email: email }).select(
+        'userPrograms'
+    );
+
+    res.status(200).json({
+        msg: 'Rest period has been added successfully.',
+        userProgramExercise:
+            updatedUser.userPrograms[programTargetIndex].programExercises,
+    });
+});
