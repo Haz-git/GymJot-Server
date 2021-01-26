@@ -5,11 +5,12 @@ const User = require('../models/userModel');
 const handleAsync = require('../util/handleAsync');
 const throwAppError = require('../util/throwAppError');
 
-exports.testController = (req, res, next) => {
+exports.authCheck = (req, res, next) => {
     res.status(200).json({
         status: 'Success',
         message:
-            'Your JWT is currently valid, you have accessed the protected route.',
+            'Your JWT is currently valid, you have access to protected routes.',
+        valid: true,
     });
 };
 
