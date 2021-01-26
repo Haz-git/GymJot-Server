@@ -22,7 +22,7 @@ router
     .route('/protected')
     .get(
         passport.authenticate('jwt', { session: false }),
-        authControllers.testController
+        authControllers.authCheck
     );
 
 //Main Powerlifting Stats Routes \\\\\\\\\\\\\\\\:
