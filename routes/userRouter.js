@@ -155,7 +155,7 @@ router
 
 router
     .route('/programs/getprogramexercises')
-    .get(
+    .post(
         passport.authenticate('jwt', { session: false }),
         programExerciseControllers.getAllProgramExercises
     );
