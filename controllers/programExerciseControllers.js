@@ -40,7 +40,7 @@ exports.getAllProgramExercises = handleAsync(async (req, res, next) => {
 exports.addNewProgramExercise = handleAsync(async (req, res, next) => {
     //Create options to add certain weight and units, and percentage of a certain weight. How would we input a maxweight we can take a percentage of?
     const { programId, sets, reps, programExerciseName } = req.body;
-    let { weight, unit, percentage, recentMaxWeight } = req.body;
+    let { weight, unit } = req.body;
     const { _id, email } = req.user;
 
     let existingUser = await User.findOne({
@@ -64,8 +64,6 @@ exports.addNewProgramExercise = handleAsync(async (req, res, next) => {
         sets,
         reps,
         weight,
-        percentage: percentage,
-        recentMaxWeight: recentMaxWeight,
         dateAdded: existingUser.generateDateNow(),
         programExerciseId: existingUser.generateUuid(),
     });
