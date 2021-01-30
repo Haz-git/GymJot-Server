@@ -134,7 +134,8 @@ exports.deleteProgramExercise = handleAsync(async (req, res, next) => {
 
     res.status(200).json({
         msg: 'Program exercise has been successfully deleted.',
-        userPrograms: updatedUser.userPrograms[targetProgram].programExercises,
+        userProgramExercises:
+            updatedUser.userPrograms[targetProgram].programExercises,
     });
 });
 
@@ -155,6 +156,7 @@ exports.addNewRestPeriod = handleAsync(async (req, res, next) => {
     );
 
     existingUser.userPrograms[programTargetIndex].programExercises.push({
+        programExerciseName: 'Rest Period',
         restLengthMinute,
         restLengthSecond,
         restId: existingUser.generateUuid(),
@@ -176,7 +178,7 @@ exports.addNewRestPeriod = handleAsync(async (req, res, next) => {
 
     res.status(200).json({
         msg: 'Rest period has been added successfully.',
-        userProgramExercise:
+        userProgramExercises:
             updatedUser.userPrograms[programTargetIndex].programExercises,
     });
 });
