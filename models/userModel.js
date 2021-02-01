@@ -189,7 +189,7 @@ userSchema.methods.findProgramExerciseIndex = function (
     array
 ) {
     const index = array.findIndex(
-        (object) => object.programExerciseId === programExerciseId
+        (object) => object[`${type}`] === programExerciseId
     );
 
     return index;

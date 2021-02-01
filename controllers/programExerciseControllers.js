@@ -132,6 +132,8 @@ exports.deleteProgramExercise = handleAsync(async (req, res, next) => {
         'userPrograms'
     );
 
+    //For some reason, this api is returning the updatedUser NOT as 'userProgramExercises' but under 'userPrograms'...
+
     res.status(200).json({
         msg: 'Program exercise has been successfully deleted.',
         userProgramExercises:
@@ -227,6 +229,7 @@ exports.deleteRestPeriod = handleAsync(async (req, res, next) => {
 
     res.status(200).json({
         msg: 'Rest exercise has been deleted',
-        userPrograms: updatedUser.userPrograms[targetProgram].programExercises,
+        userProgramExercises:
+            updatedUser.userPrograms[targetProgram].programExercises,
     });
 });
