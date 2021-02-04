@@ -12,6 +12,7 @@ const statControllers = require('../controllers/statControllers');
 const recordControllers = require('../controllers/recordControllers');
 const programControllers = require('../controllers/programControllers');
 const programExerciseControllers = require('../controllers/programExerciseControllers');
+const runProgramControllers = require('../controllers/runProgramControllers');
 
 //Authentication Routes:
 router.route('/signup').post(authControllers.signup);
@@ -193,6 +194,22 @@ router
     .delete(
         passport.authenticate('jwt', { session: false }),
         programExerciseControllers.deleteRestPeriod
+    );
+
+//Formatted Program Routes (used when user runs a program) \\\\\\\\\\\\\\\\:
+
+router
+    .route('/programs/getformattedprogram')
+    .post(
+        passport.authenticate('jwt', { session: false }),
+        runProgramControllers.getFormattedProgram
+    );
+
+router
+    .route('/programs/editformattedprogram')
+    .post(
+        passport.authenticate('jwt', { session: false }),
+        runProgramControllers.editFormattedProgram
     );
 
 module.exports = router;
