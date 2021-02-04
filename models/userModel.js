@@ -243,6 +243,21 @@ userSchema.methods.findNumRestBetweenSets = function (
     return parseInt(numSets) - 1;
 };
 
+userSchema.methods.findExistingFormattedProgram = function (targetProgramId) {
+    //This should return true if an existing program is found.
+    const user = this;
+
+    const formattedProgramIndex = user.userFormattedPrograms.findIndex(
+        (program) => program.programId === targetProgramId
+    );
+
+    if (formattedProgramIndex === -1) {
+        return false;
+    } else {
+        return true;
+    }
+};
+
 //Creating Model:
 const User = mongoose.model('User', userSchema);
 
