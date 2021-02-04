@@ -106,6 +106,7 @@ const userSchema = new mongoose.Schema(
         userArchivedDeadliftStats: [],
         userSavedStats: [],
         userPrograms: [],
+        userFormattedPrograms: [],
     },
     { minimize: false }
 );
@@ -238,8 +239,6 @@ userSchema.methods.findNumRestBetweenSets = function (
         user.userPrograms[targetProgramId].programExercises[
             targetProgramExerciseId
         ]['sets'];
-
-    console.log(numSets);
 
     return parseInt(numSets) - 1;
 };
