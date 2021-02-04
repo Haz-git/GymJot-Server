@@ -175,6 +175,13 @@ router
     );
 
 router
+    .route('/programs/addrestperiodbetweensets')
+    .post(
+        passport.authenticate('jwt', { session: false }),
+        programExerciseControllers.addRestPeriodsBetweenSets
+    );
+
+router
     .route('/programs/deleteprogramexercise')
     .delete(
         passport.authenticate('jwt', { session: false }),
