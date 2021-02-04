@@ -4,7 +4,7 @@
   "description": "Barbell Builder's API",
   "scripts": {
     "start": "nodemon server.js",
-    "pushGit": "git checkout main && git merge dev && git push origin main && git push origin heroku && git checkout dev"
+    "pushGit": "git checkout main && git merge dev && git push origin main && git push heroku main && git checkout dev"
   },
   "repository": {
     "type": "git",
