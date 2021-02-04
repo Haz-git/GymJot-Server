@@ -12,8 +12,34 @@ const throwAppError = require('../util/throwAppError');
 
 exports.getFormattedProgram = handleAsync(async (req, res, next) => {
     //This controller function should be useful when user is running program...
-    res.status(200).json({
-        msg: 'This route has been established',
+    const { _id, email } = req.user;
+    const { programId } = req.body;
+
+    let existingUser = await User.findOne({
+        _id: _id,
+        email: email,
+    });
+
+    if (existingUser.findExistingFormattedProgram(programId) === false) {
+        res.status(200).json({
+            msg: 'This program is not formatted',
+            isFormatted: 'false',
+        });
+    } else if (existingUser.findExistingFormattedProgram(programId) === true) {
+        const targetIndex = existingUser.findProgramIndex(
+            programId,
+            existingUser.userFormattedPrograms
+        );
+
+        res.status(200).json({
+            msg: 'This program has been formatted',
+            isFormatted: 'true',
+            formattedProgram: existingUser.userFormattedPrograms[targetIndex],
+        });
+    }
+
+    res.status(500).json({
+        Error: 'Your program ID is not valid.',
     });
 });
 
@@ -32,8 +58,6 @@ exports.editFormattedProgram = handleAsync(async (req, res, next) => {
         programId,
         existingUser.userPrograms
     );
-
-    console.log(programTargetIndex);
 
     //Check if the submitted formatted program is already within the userFormattedPrograms array:
 
