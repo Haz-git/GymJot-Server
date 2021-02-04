@@ -228,6 +228,22 @@ userSchema.methods.findAndEditRecord = function (
     return user.userSavedStats;
 };
 
+userSchema.methods.findNumRestBetweenSets = function (
+    targetProgramId,
+    targetProgramExerciseId
+) {
+    const user = this;
+
+    const numSets =
+        user.userPrograms[targetProgramId].programExercises[
+            targetProgramExerciseId
+        ]['sets'];
+
+    console.log(numSets);
+
+    return parseInt(numSets) - 1;
+};
+
 //Creating Model:
 const User = mongoose.model('User', userSchema);
 
