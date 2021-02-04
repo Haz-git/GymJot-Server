@@ -44,6 +44,7 @@ exports.editFormattedProgram = handleAsync(async (req, res, next) => {
         const tempProgram = existingUser.userPrograms[programTargetIndex];
 
         tempProgram['formattedExercises'] = formattedProgramObject;
+        tempProgram['dateLastFormatted'] = existingUser.generateDateNow();
 
         delete tempProgram['programExercises'];
 
@@ -61,6 +62,12 @@ exports.editFormattedProgram = handleAsync(async (req, res, next) => {
         existingUser.userFormattedPrograms[replaceIndex][
             'formattedExercises'
         ] = formattedProgramObject;
+
+        //Update recently formatted:
+
+        existingUser.userFormattedPrograms[replaceIndex][
+            'dateLastFormatted'
+        ] = existingUser.generateDateNow();
     }
 
     await User.updateOne(
