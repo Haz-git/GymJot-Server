@@ -231,3 +231,80 @@ exports.deleteRestPeriod = handleAsync(async (req, res, next) => {
             updatedUser.userPrograms[targetProgram].programExercises,
     });
 });
+
+//This should add a rest period between each set of a program exercise:
+
+exports.addRestPeriodsBetweenSets = handleAsync(async (req, res, next) => {
+    const { _id, email } = req.user;
+    const { programId, exerciseId } = req.body;
+
+    let { restLengthMinute, restLengthSecond } = req.body;
+
+    let existingUser = await User.findOne({
+        _id: _id,
+        email: email,
+    });
+
+    const targetProgram = existingUser.findProgramIndex(
+        programId,
+        existingUser.userPrograms
+    );
+
+    const targetProgramExercise = existingUser.findProgramExerciseIndex(
+        'programExerciseId',
+        exerciseId,
+        existingUser.userPrograms[targetProgram].programExercises
+    );
+
+    //Add values into the targeted stored program exercises.
+
+    //Add num rests for number of rests (sets - 1);
+
+    const restNum = existingUser.findNumRestBetweenSets(
+        targetProgram,
+        targetProgramExercise
+    );
+
+    //Test if restLengthMinute or restLengthSeconds are null. If they are, then convert them to 0.
+
+    if (restLengthMinute === null) {
+        restLengthMinute = '0';
+    }
+
+    if (restLengthSecond === null) {
+        restLengthSecond = '0';
+    }
+
+    existingUser.userPrograms[targetProgram].programExercises[
+        targetProgramExercise
+    ]['numRest'] = restNum;
+
+    existingUser.userPrograms[targetProgram].programExercises[
+        targetProgramExercise
+    ]['restLengthMinutePerSet'] = restLengthMinute;
+
+    existingUser.userPrograms[targetProgram].programExercises[
+        targetProgramExercise
+    ]['restLengthSecondPerSet'] = restLengthSecond;
+
+    // console.log(existingUser.userPrograms);
+
+    await User.updateOne(
+        { _id: _id, email: email },
+        { userPrograms: existingUser.userPrograms },
+        { bypassDocumentValidation: true },
+        (err) => {
+            if (err) console.log(err);
+        }
+    );
+
+    const updatedUser = await User.findOne({ _id: _id, email: email }).select(
+        'userPrograms'
+    );
+
+    res.status(200).json({
+        msg: 'Rest periods have been added between sets',
+        userProgramExercises:
+            updatedUser.userPrograms[targetProgram].programExercises,
+    });
+});
