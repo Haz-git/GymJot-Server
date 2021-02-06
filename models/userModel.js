@@ -258,6 +258,131 @@ userSchema.methods.findExistingFormattedProgram = function (targetProgramId) {
     }
 };
 
+userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
+    //The purpose of this function is to generate an exercise sequence of with runProgram in the front-end will follow:
+
+    /*
+        1. Iterate through array
+        2. For each item in array, check for numRest, and make note of that number.
+        3. Recognize the number of sets: create an iterator for numSets and numRest
+        4. Create a for loop to push in an exercise (with the correct details and Id, just in case), and then a rest until iterator is 0.
+    */
+
+    let resultSequence = [];
+    formattedProgramArray.forEach((item) => {
+        if (
+            item.exerciseDetails !== undefined &&
+            item.exerciseDetails !== null &&
+            item.exerciseDetails.numRest !== undefined &&
+            item.exerciseDetails.numRest !== null
+        ) {
+            //Support for exercises with rest between sets:
+            const {
+                numRest,
+                sets,
+                restLengthMinutePerSet,
+                restLengthSecondPerSet,
+                programExerciseId,
+                programExerciseName,
+                reps,
+                weight,
+            } = item.exerciseDetails;
+
+            let restLimit = parseInt(numRest);
+            let setLimit = parseInt(sets);
+
+            //Generate two arrays:
+            let restArray = [];
+            let setArray = [];
+
+            for (let i = 0; i < restLimit; i++) {
+                restArray.push({
+                    restNum: i + 1,
+                    restLengthMinutePerSet: restLengthMinutePerSet,
+                    restLengthSecondPerSet: restLengthSecondPerSet,
+                });
+            }
+
+            for (let j = 0; j < setLimit; j++) {
+                setArray.push({
+                    programExerciseName: programExerciseName,
+                    programExerciseId: programExerciseId,
+                    currentSet: j + 1,
+                    totalSets: sets,
+                    reps: reps,
+                    weight: weight,
+                });
+            }
+
+            //Combine the arrays with alterating info:
+
+            let arrayCombined = setArray
+                .map(function (v, i) {
+                    return [v, restArray[i]];
+                })
+                .reduce(function (a, b) {
+                    return a.concat(b);
+                });
+
+            arrayCombined.pop();
+
+            //Push combined sequence into results array:
+
+            resultSequence.push(arrayCombined);
+        } else if (
+            item.restDetails !== undefined &&
+            item.restDetails !== null
+        ) {
+            //Support for rest periods:
+
+            const {
+                programExerciseName,
+                restLengthMinute,
+                restLengthSecond,
+                restId,
+            } = item.restDetails;
+
+            resultSequence.push({
+                programExerciseName: programExerciseName,
+                restLengthMinute: restLengthMinute,
+                restLengthSecond: restLengthSecond,
+                restId: restId,
+            });
+        } else if (
+            item.exerciseDetails !== undefined &&
+            item.exerciseDetails.restNum === undefined
+        ) {
+            //Support for single set exercises or exercises without rest between sets
+
+            const {
+                sets,
+                programExerciseId,
+                programExerciseName,
+                reps,
+                weight,
+            } = item.exerciseDetails;
+
+            let setLimit = parseInt(sets);
+            let setArray = [];
+
+            for (let j = 0; j < setLimit; j++) {
+                setArray.push({
+                    programExerciseName: programExerciseName,
+                    programExerciseId: programExerciseId,
+                    currentSet: j + 1,
+                    totalSets: sets,
+                    reps: reps,
+                    weight: weight,
+                });
+            }
+
+            resultSequence.push(setArray);
+        }
+    });
+
+    return resultSequence.flat();
+};
+
 //Creating Model:
 const User = mongoose.model('User', userSchema);
 
