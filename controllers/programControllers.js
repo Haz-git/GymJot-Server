@@ -128,11 +128,28 @@ exports.deleteExistingProgram = handleAsync(async (req, res, next) => {
         existingUser.userPrograms
     );
 
+    const deleteFormattedProgramIndex = existingUser.findProgramIndex(
+        programId,
+        existingUser.userFormattedPrograms
+    );
+
+    //Remove program from userPrograms as well as any formatted programs:
+
     existingUser.userPrograms.splice(deleteProgramIndex, 1);
+    existingUser.userFormattedPrograms.splice(deleteFormattedProgramIndex, 1);
 
     await User.updateOne(
         { _id: _id, email: email },
         { userPrograms: existingUser.userPrograms },
+        { bypassDocumentValidation: true },
+        (err) => {
+            if (err) console.log(err);
+        }
+    );
+
+    await User.updateOne(
+        { _id: _id, email: email },
+        { userFormattedPrograms: existingUser.userFormattedPrograms },
         { bypassDocumentValidation: true },
         (err) => {
             if (err) console.log(err);
