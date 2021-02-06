@@ -74,7 +74,15 @@ exports.editFormattedProgram = handleAsync(async (req, res, next) => {
 
         existingUser.userFormattedPrograms.push(tempProgram);
 
-        console.log(existingUser.userFormattedPrograms);
+        //Need to generate programSequence:
+
+        const formattedProgramSequence = existingUser.generateProgramSequence(
+            formattedProgramObject
+        );
+
+        existingUser.userFormattedPrograms[programTargetIndex][
+            'programSequence'
+        ] = formattedProgramSequence;
     } else if (existingUser.findExistingFormattedProgram(programId) === true) {
         //If the program already exists within userFormattedPrograms, then find the correct program and replace the 'formattedExercises' information:
 
@@ -92,6 +100,16 @@ exports.editFormattedProgram = handleAsync(async (req, res, next) => {
         existingUser.userFormattedPrograms[replaceIndex][
             'dateLastFormatted'
         ] = existingUser.generateDateNow();
+
+        //Need to re-generate programSequence:
+
+        const reFormattedProgramSequence = existingUser.generateProgramSequence(
+            formattedProgramObject
+        );
+
+        existingUser.userFormattedPrograms[replaceIndex][
+            'programSequence'
+        ] = reFormattedProgramSequence;
     }
 
     await User.updateOne(
@@ -108,7 +126,7 @@ exports.editFormattedProgram = handleAsync(async (req, res, next) => {
     );
 
     res.status(200).json({
-        msg: 'This route has been established (edit)',
+        msg: 'User formatted program have been saved.',
         userFormattedProgram: updatedUser,
     });
 });
