@@ -143,7 +143,15 @@ exports.deleteProgramExercise = handleAsync(async (req, res, next) => {
 
 exports.addNewRestPeriod = handleAsync(async (req, res, next) => {
     const { _id, email } = req.user;
-    const { restLengthMinute, restLengthSecond, programId } = req.body;
+    let { restLengthMinute, restLengthSecond, programId } = req.body;
+
+    if (restLengthMinute === null || restLengthMinute === '') {
+        restLengthMinute = '0';
+    }
+
+    if (restLengthSecond === null || restLengthSecond === '') {
+        restLengthSecond = '0';
+    }
 
     let existingUser = await User.findOne({
         _id: _id,
