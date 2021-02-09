@@ -70,19 +70,14 @@ exports.editFormattedProgram = handleAsync(async (req, res, next) => {
         tempProgram['formattedExercises'] = formattedProgramObject;
         tempProgram['dateLastFormatted'] = existingUser.generateDateNow();
 
-        delete tempProgram['programExercises'];
-
-        existingUser.userFormattedPrograms.push(tempProgram);
-
-        //Need to generate programSequence:
-
-        const formattedProgramSequence = existingUser.generateProgramSequence(
+        //Generating Program Sequence:
+        tempProgram['programSequence'] = existingUser.generateProgramSequence(
             formattedProgramObject
         );
 
-        existingUser.userFormattedPrograms[programTargetIndex][
-            'programSequence'
-        ] = formattedProgramSequence;
+        delete tempProgram['programExercises'];
+
+        existingUser.userFormattedPrograms.push(tempProgram);
     } else if (existingUser.findExistingFormattedProgram(programId) === true) {
         //If the program already exists within userFormattedPrograms, then find the correct program and replace the 'formattedExercises' information:
 
