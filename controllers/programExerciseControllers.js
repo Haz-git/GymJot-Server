@@ -88,6 +88,61 @@ exports.addNewProgramExercise = handleAsync(async (req, res, next) => {
     });
 });
 
+exports.addNewProgramPyramidSet = handleAsync(async (req, res, next) => {
+    //Create options to add certain weight and units, and percentage of a certain weight. How would we input a maxweight we can take a percentage of?
+    const { programId, programExerciseName, setObjectsArray } = req.body;
+    const { _id, email } = req.user;
+
+    let existingUser = await User.findOne({
+        _id: _id,
+        email: email,
+    });
+
+    const programTargetIndex = existingUser.findProgramIndex(
+        programId,
+        existingUser.userPrograms
+    );
+
+    //We'll be using lbs for DB storage if weight is given with units of kg. Iterate through the setObjectsArray, and find if there are any 'unit' keys
+
+    for (let i = 0; i < setObjectsArray.length; i++) {
+        if (
+            setObjectsArray[i].unit !== undefined &&
+            setObjectsArray[i].unit === 'Kgs'
+        ) {
+            setObjectsArray[i]['weight'] = (
+                setObjectsArray[i].weight * 2.20462
+            ).toFixed(0);
+        }
+    }
+
+    existingUser.userPrograms[programTargetIndex].programExercises.push({
+        programExerciseName,
+        setObjectsArray,
+        dateAdded: existingUser.generateDateNow(),
+        programExerciseId: existingUser.generateUuid(),
+    });
+
+    await User.updateOne(
+        { _id: _id, email: email },
+        { userPrograms: existingUser.userPrograms },
+        { bypassDocumentValidation: true },
+        (err) => {
+            if (err) console.log(err);
+        }
+    );
+
+    const updatedUser = await User.findOne({ _id: _id, email: email }).select(
+        'userPrograms'
+    );
+
+    res.status(200).json({
+        msg: 'Pyramid Set has been added successfully.',
+        userProgramExercise:
+            updatedUser.userPrograms[programTargetIndex].programExercises,
+    });
+});
+
 //Controller function for deleting a program exercise:
 
 exports.deleteProgramExercise = handleAsync(async (req, res, next) => {
