@@ -169,6 +169,13 @@ router
     );
 
 router
+    .route('/programs/addnewprogrampyramidset')
+    .post(
+        passport.authenticate('jwt', { session: false }),
+        programExerciseControllers.addNewProgramPyramidSet
+    );
+
+router
     .route('/programs/addnewrestperiod')
     .post(
         passport.authenticate('jwt', { session: false }),
