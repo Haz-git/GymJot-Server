@@ -241,13 +241,7 @@ userSchema.methods.findNumRestBetweenSets = function (
         ]['sets'] !== undefined &&
         user.userPrograms[targetProgramId].programExercises[
             targetProgramExerciseId
-        ]['sets'] !== null &&
-        user.userPrograms[targetProgramId].programExercises[
-            targetProgramExerciseId
-        ]['setObjectsArray'] === undefined &&
-        user.userPrograms[targetProgramId].programExercises[
-            targetProgramExerciseId
-        ]['setObjectsArray'] === null
+        ]['setObjectsArray'] === undefined
     ) {
         //If all the conditions are satisfied, then the numRest will be calculated for non-pyramid sets.
         const numSets =
