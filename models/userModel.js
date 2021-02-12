@@ -356,7 +356,11 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
             //Push combined sequence into results array:
 
             resultSequence.push(arrayCombined);
-        } else if (item.exerciseDetails.setObjectsArray !== undefined) {
+        } else if (
+            item.exerciseDetails !== undefined &&
+            item.exerciseDetails !== null &&
+            item.exerciseDetails.setObjectsArray !== undefined
+        ) {
             //Support for pyramid sets:
             const {
                 numRest,
