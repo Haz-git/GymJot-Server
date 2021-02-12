@@ -304,6 +304,7 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
         if (
             item.exerciseDetails !== undefined &&
             item.exerciseDetails !== null &&
+            item.exerciseDetails.setObjectsArray === undefined &&
             item.exerciseDetails.numRest !== undefined &&
             item.exerciseDetails.numRest !== null
         ) {
@@ -345,7 +346,7 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
                 });
             }
 
-            //Combine the arrays with alterating info:
+            //Combine the arrays with alternating info:
 
             let arrayCombined = setArray
                 .map(function (v, i) {
@@ -355,6 +356,75 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
                     return a.concat(b);
                 });
 
+            //Removes undefined final value:
+            arrayCombined.pop();
+
+            //Push combined sequence into results array:
+
+            resultSequence.push(arrayCombined);
+        } else if (item.exerciseDetails.setObjectsArray !== undefined) {
+            //Support for pyramid sets:
+            const {
+                numRest,
+                restLengthMinutePerSet,
+                restLengthSecondPerSet,
+                programExerciseId,
+                programExerciseName,
+            } = item.exerciseDetails;
+
+            let restLimit = parseInt(numRest);
+
+            let restArray = [];
+            let setArray = [];
+
+            //Items in array:
+
+            // setId,
+            // weight,
+            // reps,
+            // unit,
+
+            for (
+                let i = 0;
+                i < item.exerciseDetails.setObjectsArray.length;
+                i++
+            ) {
+                const {
+                    setId,
+                    weight,
+                    reps,
+                    unit,
+                } = item.exerciseDetails.setObjectsArray[i];
+
+                //push the exercise sets into the setArray;
+                setArray.push({
+                    programExerciseName: programExerciseName,
+                    programExerciseId: programExerciseId,
+                    currentSet: setId,
+                    totalSets: item.exerciseDetails.setObjectsArray.length,
+                    reps: reps,
+                    weight: weight,
+                    unit: unit,
+                });
+            }
+
+            for (let j = 0; j < restLimit; j++) {
+                restArray.push({
+                    restNum: j + 1,
+                    restLengthMinutePerSet: restLengthMinutePerSet,
+                    restLengthSecondPerSet: restLengthSecondPerSet,
+                });
+            }
+
+            let arrayCombined = setArray
+                .map(function (v, i) {
+                    return [v, restArray[i]];
+                })
+                .reduce(function (a, b) {
+                    return a.concat(b);
+                });
+
+            //Removes undefined final value:
             arrayCombined.pop();
 
             //Push combined sequence into results array:
