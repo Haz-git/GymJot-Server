@@ -67,6 +67,20 @@ exports.editFormattedProgram = handleAsync(async (req, res, next) => {
 
         const tempProgram = existingUser.userPrograms[programTargetIndex];
 
+        //Add an isFormatted property into the userProgram targetIndex:
+        existingUser.userPrograms[programTargetIndex]['isFormatted'] = 'true';
+
+        await User.updateOne(
+            { _id: _id, email: email },
+            {
+                userPrograms: existingUser.userPrograms,
+            },
+            { bypassDocumentValidation: true },
+            (err) => {
+                if (err) console.log(err);
+            }
+        );
+
         tempProgram['formattedExercises'] = formattedProgramObject;
         tempProgram['dateLastFormatted'] = existingUser.generateDateNow();
 
