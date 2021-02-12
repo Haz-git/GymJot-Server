@@ -235,12 +235,43 @@ userSchema.methods.findNumRestBetweenSets = function (
 ) {
     const user = this;
 
-    const numSets =
+    if (
         user.userPrograms[targetProgramId].programExercises[
             targetProgramExerciseId
-        ]['sets'];
+        ]['sets'] !== undefined &&
+        user.userPrograms[targetProgramId].programExercises[
+            targetProgramExerciseId
+        ]['sets'] !== null &&
+        user.userPrograms[targetProgramId].programExercises[
+            targetProgramExerciseId
+        ]['setObjectsArray'] === undefined &&
+        user.userPrograms[targetProgramId].programExercises[
+            targetProgramExerciseId
+        ]['setObjectsArray'] === null
+    ) {
+        //If all the conditions are satisfied, then the numRest will be calculated for non-pyramid sets.
+        const numSets =
+            user.userPrograms[targetProgramId].programExercises[
+                targetProgramExerciseId
+            ]['sets'];
 
-    return parseInt(numSets) - 1;
+        return parseInt(numSets) - 1;
+    } else if (
+        user.userPrograms[targetProgramId].programExercises[
+            targetProgramExerciseId
+        ]['sets'] === undefined &&
+        user.userPrograms[targetProgramId].programExercises[
+            targetProgramExerciseId
+        ]['setObjectsArray'] !== undefined
+    ) {
+        //If all of the conditions are met above, then the numRest will be calculated for pyramid sets.
+        const numSets =
+            user.userPrograms[targetProgramId].programExercises[
+                targetProgramExerciseId
+            ]['setObjectsArray'].length;
+
+        return parseInt(numSets) - 1;
+    }
 };
 
 userSchema.methods.findExistingFormattedProgram = function (targetProgramId) {
