@@ -359,9 +359,49 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
         } else if (
             item.exerciseDetails !== undefined &&
             item.exerciseDetails !== null &&
-            item.exerciseDetails.setObjectsArray !== undefined
+            item.exerciseDetails.setObjectsArray !== undefined &&
+            item.exerciseDetails.restNum === undefined
         ) {
-            //Support for pyramid sets:
+            //Support for pyramid sets without rest between sets:
+
+            const {
+                programExerciseId,
+                programExerciseName,
+            } = item.exerciseDetails;
+
+            let setArray = [];
+
+            for (
+                let i = 0;
+                i < item.exerciseDetails.setObjectsArray.length;
+                i++
+            ) {
+                const {
+                    setId,
+                    weight,
+                    reps,
+                    unit,
+                } = item.exerciseDetails.setObjectsArray[i];
+
+                setArray.push({
+                    programExerciseName: programExerciseName,
+                    programExerciseId: programExerciseId,
+                    currentSet: setId,
+                    totalSets: item.exerciseDetails.setObjectsArray.length,
+                    reps: reps,
+                    weight: weight,
+                    unit: unit,
+                });
+            }
+
+            resultSequence.push(setArray);
+        } else if (
+            item.exerciseDetails !== undefined &&
+            item.exerciseDetails !== null &&
+            item.exerciseDetails.setObjectsArray !== undefined &&
+            item.exerciseDetails.restNum !== undefined
+        ) {
+            //Support for pyramid sets with rest between sets:
             const {
                 numRest,
                 restLengthMinutePerSet,
