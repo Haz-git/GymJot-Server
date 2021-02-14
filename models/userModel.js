@@ -357,10 +357,10 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
 
             resultSequence.push(arrayCombined);
         } else if (
+            item.exerciseDetails.numRest === undefined &&
             item.exerciseDetails !== undefined &&
             item.exerciseDetails !== null &&
-            item.exerciseDetails.setObjectsArray !== undefined &&
-            item.exerciseDetails.restNum === undefined
+            item.exerciseDetails.setObjectsArray !== undefined
         ) {
             //Support for pyramid sets without rest between sets:
 
@@ -396,10 +396,10 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
 
             resultSequence.push(setArray);
         } else if (
+            item.exerciseDetails.numRest !== undefined &&
             item.exerciseDetails !== undefined &&
             item.exerciseDetails !== null &&
-            item.exerciseDetails.setObjectsArray !== undefined &&
-            item.exerciseDetails.restNum !== undefined
+            item.exerciseDetails.setObjectsArray !== undefined
         ) {
             //Support for pyramid sets with rest between sets:
             const {
