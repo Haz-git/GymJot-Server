@@ -79,8 +79,6 @@ exports.editExistingProgram = handleAsync(async (req, res, next) => {
         existingUser.userPrograms
     );
 
-    console.log(programEditIndex);
-
     if (newProgramDesc !== undefined && newProgramDesc !== '') {
         existingUser.userPrograms[programEditIndex][
             'programDesc'
@@ -164,4 +162,76 @@ exports.deleteExistingProgram = handleAsync(async (req, res, next) => {
         msg: 'Program has been deleted successfully.',
         userPrograms: updatedUser.userPrograms,
     });
+});
+
+exports.increaseProgramRunCount = handleAsync(async (req, res, next) => {
+    const { programId } = req.body;
+    const { _id, email } = req.user;
+
+    let existingUser = await User.findOne({
+        _id: _id,
+        email: email,
+    });
+
+    const programIndex = existingUser.findProgramIndex(
+        programId,
+        existingUser.userPrograms
+    );
+
+    //Check if the user has ran this program before:
+
+    if (
+        existingUser.userPrograms[programIndex].runCount !== undefined &&
+        existingUser.userPrograms[programIndex].runCount !== null
+    ) {
+        let currentCount = parseInt(
+            existingUser.userPrograms[programIndex].runCount
+        );
+
+        let newCount = currentCount + 1;
+
+        existingUser.userPrograms[programIndex].runCount = newCount.toString();
+
+        await User.updateOne(
+            { _id: _id, email: email },
+            { userPrograms: existingUser.userPrograms },
+            { bypassDocumentValidation: true },
+            (err) => {
+                if (err) console.log(err);
+            }
+        );
+
+        const updatedUser = await User.findOne({
+            _id: _id,
+            email: email,
+        }).select('userPrograms');
+
+        res.status(200).json({
+            msg: 'Program runCount has been increased successfully',
+            userPrograms: updatedUser.userPrograms,
+        });
+    } else {
+        let newCount = 1;
+
+        existingUser.userPrograms[programIndex].runCount = newCount.toString();
+
+        await User.updateOne(
+            { _id: _id, email: email },
+            { userPrograms: existingUser.userPrograms },
+            { bypassDocumentValidation: true },
+            (err) => {
+                if (err) console.log(err);
+            }
+        );
+
+        const updatedUser = await User.findOne({
+            _id: _id,
+            email: email,
+        }).select('userPrograms');
+
+        res.status(200).json({
+            msg: 'Program runCount has been added successfully',
+            userPrograms: updatedUser.userPrograms,
+        });
+    }
 });
