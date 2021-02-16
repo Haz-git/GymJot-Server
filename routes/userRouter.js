@@ -152,6 +152,13 @@ router
         programControllers.deleteExistingProgram
     );
 
+router
+    .route('/increaseprogramruncount')
+    .post(
+        passport.authenticate('jwt', { session: false }),
+        programControllers.increaseProgramRunCount
+    );
+
 //Program Exercise Routes (under programs) \\\\\\\\\\\\\\\\:
 
 router
