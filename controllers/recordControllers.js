@@ -41,6 +41,11 @@ exports.addNewRecord = handleAsync(async (req, res, next) => {
         weight = (weight * 2.20462).toFixed(2);
     }
 
+    //Updating 'dateUpdated' value for stat:
+    existingUser.userSavedStats[targetIndex][
+        'dateUpdated'
+    ] = existingUser.generateDateNow();
+
     //Adding object to array:
 
     existingUser.userSavedStats[targetIndex].records.push({
@@ -89,6 +94,16 @@ exports.editRecord = handleAsync(async (req, res, next) => {
         _id: _id,
         email: email,
     });
+
+    const targetIndex = existingUser.findExerciseIndex(
+        exerciseId,
+        existingUser.userSavedStats
+    );
+
+    //Updating 'dateUpdated' value for stat:
+    existingUser.userSavedStats[targetIndex][
+        'dateUpdated'
+    ] = existingUser.generateDateNow();
 
     const dateModified = existingUser.generateDateNow();
 
