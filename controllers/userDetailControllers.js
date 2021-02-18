@@ -8,6 +8,27 @@ const bcrypt = require('bcryptjs');
 
 //Controller Functions:
 
+exports.getExistingUserDetails = handleAsync(async (req, res, next) => {
+    const { _id, email } = req.user;
+
+    let existingUser = await User.findOne({
+        _id: _id,
+        email: email,
+    });
+
+    const { firstName, lastName, userName } = existingUser;
+
+    res.status(200).json({
+        msg: 'User information successfully retrieved',
+        user: {
+            firstName,
+            lastName,
+            userName,
+            email: existingUser.email,
+        },
+    });
+});
+
 exports.editExistingUserDetails = handleAsync(async (req, res, next) => {
     /*I think in this function we can create a switch/case and check for what is needed, I.E:
         A. General User Details = firstName, lastName, userName,
