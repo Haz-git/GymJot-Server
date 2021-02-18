@@ -230,6 +230,13 @@ router
 // Routes for user detail changes \\\\\\\\\\\\\\\\\\\\\\\\:
 
 router
+    .route('/settings/getuserdetails')
+    .get(
+        passport.authenticate('jwt', { session: false }),
+        userDetailControllers.getExistingUserDetails
+    );
+
+router
     .route('/settings/edituserdetails')
     .post(
         passport.authenticate('jwt', { session: false }),
