@@ -83,7 +83,7 @@ exports.editExistingUserDetails = handleAsync(async (req, res, next) => {
 
             res.status(200).json({
                 msg: 'Your user information has been updated successfully.',
-                userDetails: {
+                user: {
                     firstName: updatedUser.firstName,
                     lastName: updatedUser.lastName,
                     userName: updatedUser.userName,
@@ -120,7 +120,10 @@ exports.editExistingUserDetails = handleAsync(async (req, res, next) => {
             res.status(200).json({
                 msg:
                     'Your user email has been updated. Your sign in credentials have been changed.',
-                userDetails: {
+                user: {
+                    firstName: existingUser.firstName,
+                    lastName: existingUser.lastName,
+                    userName: existingUser.userName,
                     email: updatedEmailUser.email,
                 },
             });
@@ -164,6 +167,12 @@ exports.editExistingUserDetails = handleAsync(async (req, res, next) => {
                                 res.status(200).json({
                                     msg:
                                         'Your user password has been updated. Your sign in credentials have been changed.',
+                                    user: {
+                                        firstName: existingUser.firstName,
+                                        lastName: existingUser.lastName,
+                                        userName: existingUser.userName,
+                                        email: updatedEmailUser.email,
+                                    },
                                 });
                             } else {
                                 res.status(401).json({
