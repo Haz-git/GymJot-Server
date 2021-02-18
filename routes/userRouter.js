@@ -13,6 +13,7 @@ const recordControllers = require('../controllers/recordControllers');
 const programControllers = require('../controllers/programControllers');
 const programExerciseControllers = require('../controllers/programExerciseControllers');
 const runProgramControllers = require('../controllers/runProgramControllers');
+const userDetailControllers = require('../controllers/userDetailControllers');
 
 //Authentication Routes:
 router.route('/signup').post(authControllers.signup);
@@ -224,6 +225,15 @@ router
     .post(
         passport.authenticate('jwt', { session: false }),
         runProgramControllers.editFormattedProgram
+    );
+
+// Routes for user detail changes \\\\\\\\\\\\\\\\\\\\\\\\:
+
+router
+    .route('/settings/edituserdetails')
+    .post(
+        passport.authenticate('jwt', { session: false }),
+        userDetailControllers.editExistingUserDetails
     );
 
 module.exports = router;
