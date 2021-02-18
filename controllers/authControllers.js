@@ -76,7 +76,12 @@ exports.login = handleAsync(async (req, res, next) => {
                             status: 'Success',
                             token: tokenObject.token,
                             expiresIn: tokenObject.expires,
-                            user,
+                            user: {
+                                firstName: user.firstName,
+                                lastName: user.lastName,
+                                userName: user.userName,
+                                email: user.email,
+                            },
                         });
                     } else {
                         //isValid is false, send error:
