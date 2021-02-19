@@ -167,12 +167,12 @@ exports.editExistingUserDetails = handleAsync(async (req, res, next) => {
                                 res.status(200).json({
                                     msg:
                                         'Your user password has been updated. Your sign in credentials have been changed.',
-                                    user: {
-                                        firstName: existingUser.firstName,
-                                        lastName: existingUser.lastName,
-                                        userName: existingUser.userName,
-                                        email: updatedEmailUser.email,
-                                    },
+                                    // user: {
+                                    //     firstName: existingUser.firstName,
+                                    //     lastName: existingUser.lastName,
+                                    //     userName: existingUser.userName,
+                                    //     email: existingUser.email,
+                                    // },
                                 });
                             } else {
                                 res.status(401).json({
