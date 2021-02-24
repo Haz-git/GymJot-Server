@@ -72,6 +72,10 @@ const userSchema = new mongoose.Schema(
                 message: 'Your passwords do not match!',
             },
         },
+        isNewUser: {
+            type: Boolean,
+            required: [false],
+        },
         userExistingPLStats: {
             type: mongoose.Schema.Types.Mixed,
             default: {
