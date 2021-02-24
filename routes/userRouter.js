@@ -36,6 +36,13 @@ router
         tutorialModalControllers.setIsNewUserValue
     );
 
+router
+    .route('/getisnewuservalue')
+    .get(
+        passport.authenticate('jwt', { session: false }),
+        tutorialModalControllers.getIsNewUserValue
+    );
+
 //Main Powerlifting Stats Routes \\\\\\\\\\\\\\\\:
 
 router
