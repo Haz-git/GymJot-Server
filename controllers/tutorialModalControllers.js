@@ -5,6 +5,20 @@ const User = require('../models/userModel');
 const handleAsync = require('../util/handleAsync');
 const throwAppError = require('../util/throwAppError');
 
+exports.getIsNewUserValue = handleAsync(async (req, res, next) => {
+    const { _id, email } = req.user;
+
+    let existingUser = await User.findOne({
+        _id: _id,
+        email: email,
+    }).select('isNewUser');
+
+    res.status(200).json({
+        msg: 'isNewUser value has been successfully changed',
+        isNewUserValue: existingUser.isNewUser,
+    });
+});
+
 exports.setIsNewUserValue = handleAsync(async (req, res, next) => {
     const { _id, email } = req.user;
     const { booleanValue } = req.body;
@@ -25,12 +39,18 @@ exports.setIsNewUserValue = handleAsync(async (req, res, next) => {
         }
     );
 
-    const updatedUser = await User.findOne({ _id: _id, email: email }).select(
-        'isNewUser'
-    );
+    const updatedUser = await User.findOne({ _id: _id, email: email });
+
+    const { firstName, lastName, userName, isNewUser } = updatedUser;
 
     res.status(200).json({
         msg: 'isNewUser value has been successfully changed',
-        isNewUser: updatedUser.isNewUser,
+        user: {
+            firstName,
+            lastName,
+            userName,
+            isNewUser,
+            email: updatedUser.email,
+        },
     });
 });
