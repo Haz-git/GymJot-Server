@@ -16,7 +16,6 @@ const options = {
     secretOrKey: process.env.JWT_SECRET,
     algorithms: ['HS256'],
 };
-
 //This function will run on every route that we use the passport.authenticate() middleware. Passport uses jsonwebtoken's verify method.
 
 module.exports = (passport) => {
