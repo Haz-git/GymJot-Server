@@ -35,6 +35,7 @@ exports.signup = handleAsync(async (req, res, next) => {
         email,
         password,
         passwordConfirm,
+        isNewUser: true,
     });
 
     //If all tests pass in the Schema, then the user will be created, and JSON response will be sent:
