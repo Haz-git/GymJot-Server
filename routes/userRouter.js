@@ -14,6 +14,7 @@ const programControllers = require('../controllers/programControllers');
 const programExerciseControllers = require('../controllers/programExerciseControllers');
 const runProgramControllers = require('../controllers/runProgramControllers');
 const userDetailControllers = require('../controllers/userDetailControllers');
+const tutorialModalControllers = require('../controllers/tutorialModalControllers');
 
 //Authentication Routes:
 router.route('/signup').post(authControllers.signup);
@@ -25,6 +26,14 @@ router
     .get(
         passport.authenticate('jwt', { session: false }),
         authControllers.authCheck
+    );
+
+//Route for 'isNewUser' tutorial modal ///////////////////:
+router
+    .route('/setisnewuser')
+    .post(
+        passport.authenticate('jwt', { session: false }),
+        tutorialModalControllers.setIsNewUserValue
     );
 
 //Main Powerlifting Stats Routes \\\\\\\\\\\\\\\\:
