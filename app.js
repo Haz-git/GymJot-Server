@@ -50,6 +50,7 @@ app.use(hpp());
 //CORS Policy:
 
 const allowedDomains = [
+    'https://gymjot.netlify.app',
     'https://barbellbuilder.netlify.app',
     'http://localhost:3000',
     'https://dark-station-193740.postman.co',
