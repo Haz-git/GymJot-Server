@@ -361,8 +361,8 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
 
             resultSequence.push(arrayCombined);
         } else if (
-            item.exerciseDetails.numRest === undefined &&
             item.exerciseDetails !== undefined &&
+            item.exerciseDetails.numRest === undefined &&
             item.exerciseDetails !== null &&
             item.exerciseDetails.setObjectsArray !== undefined
         ) {
@@ -400,8 +400,8 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
 
             resultSequence.push(setArray);
         } else if (
-            item.exerciseDetails.numRest !== undefined &&
             item.exerciseDetails !== undefined &&
+            item.exerciseDetails.numRest !== undefined &&
             item.exerciseDetails !== null &&
             item.exerciseDetails.setObjectsArray !== undefined
         ) {
