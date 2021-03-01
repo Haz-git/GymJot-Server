@@ -501,7 +501,9 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
             });
         } else if (
             item.exerciseDetails !== undefined &&
-            item.exerciseDetails.restNum === undefined
+            item.exerciseDetails.restNum === undefined &&
+            item.exerciseDetails.programExerciseType !==
+                'CARDIO_PROGRAM_EXERCISE'
         ) {
             //Support for single set exercises or exercises without rest between sets -- This should be applicable to any program exercise, such as main lift, stats, new exercise, and pyramid set. Therefore, there is no check for programExerciseType.
 
@@ -528,6 +530,26 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
             }
 
             resultSequence.push(setArray);
+        } else if (
+            item.exerciseDetails !== undefined &&
+            item.exerciseDetails.programExerciseType ===
+                'CARDIO_PROGRAM_EXERCISE'
+        ) {
+            //Support for cardio exercises:
+
+            const {
+                cardioMinutes,
+                cardioSeconds,
+                programExerciseName,
+                programExerciseId,
+            } = item.exerciseDetails;
+
+            resultSequence.push({
+                programExerciseName,
+                programExerciseId,
+                cardioMinutes,
+                cardioSeconds,
+            });
         }
     });
 
