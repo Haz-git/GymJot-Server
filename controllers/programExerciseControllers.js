@@ -96,6 +96,55 @@ exports.addNewProgramExercise = handleAsync(async (req, res, next) => {
     });
 });
 
+exports.addNewProgramCardio = handleAsync(async (req, res, next) => {
+    const {
+        programId,
+        programExerciseType,
+        programExerciseName,
+        cardioMinutes,
+        cardioSeconds,
+    } = req.body;
+    const { _id, email } = req.user;
+
+    let existingUser = await User.findOne({
+        _id: _id,
+        email: email,
+    });
+
+    const programTargetIndex = existingUser.findProgramIndex(
+        programId,
+        existingUser.userPrograms
+    );
+
+    existingUser.userPrograms[programTargetIndex].programExercises.push({
+        programExerciseName,
+        programExerciseType,
+        cardioMinutes,
+        cardioSeconds,
+        dateAdded: existingUser.generateDateNow(),
+        programExerciseId: existingUser.generateUuid(),
+    });
+
+    await User.updateOne(
+        { _id: _id, email: email },
+        { userPrograms: existingUser.userPrograms },
+        { bypassDocumentValidation: true },
+        (err) => {
+            if (err) console.log(err);
+        }
+    );
+
+    const updatedUser = await User.findOne({ _id: _id, email: email }).select(
+        'userPrograms'
+    );
+
+    res.status(200).json({
+        msg: 'Cardio exercise has been added successfully.',
+        userProgramExercise:
+            updatedUser.userPrograms[programTargetIndex].programExercises,
+    });
+});
+
 exports.addNewProgramPyramidSet = handleAsync(async (req, res, next) => {
     //Create options to add certain weight and units, and percentage of a certain weight. How would we input a maxweight we can take a percentage of?
     const {
