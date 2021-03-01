@@ -318,6 +318,7 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
                 programExerciseName,
                 reps,
                 weight,
+                programExerciseType,
             } = item.exerciseDetails;
 
             let restLimit = parseInt(numRest);
@@ -337,6 +338,7 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
 
             for (let j = 0; j < setLimit; j++) {
                 setArray.push({
+                    programExerciseType,
                     programExerciseName: programExerciseName,
                     programExerciseId: programExerciseId,
                     currentSet: j + 1,
@@ -375,6 +377,7 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
             const {
                 programExerciseId,
                 programExerciseName,
+                programExerciseType,
             } = item.exerciseDetails;
 
             let setArray = [];
@@ -392,6 +395,7 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
                 } = item.exerciseDetails.setObjectsArray[i];
 
                 setArray.push({
+                    programExerciseType: programExerciseType,
                     programExerciseName: programExerciseName,
                     programExerciseId: programExerciseId,
                     currentSet: setId,
@@ -418,6 +422,7 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
                 restLengthSecondPerSet,
                 programExerciseId,
                 programExerciseName,
+                programExerciseType,
             } = item.exerciseDetails;
 
             let restLimit = parseInt(numRest);
@@ -446,6 +451,7 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
 
                 //push the exercise sets into the setArray;
                 setArray.push({
+                    programExerciseType: programExerciseType,
                     programExerciseName: programExerciseName,
                     programExerciseId: programExerciseId,
                     currentSet: setId,
@@ -491,9 +497,11 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
                 restLengthMinute,
                 restLengthSecond,
                 restId,
+                programExerciseType,
             } = item.restDetails;
 
             resultSequence.push({
+                programExerciseType: programExerciseType,
                 programExerciseName: programExerciseName,
                 restLengthMinute: restLengthMinute,
                 restLengthSecond: restLengthSecond,
@@ -513,6 +521,7 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
                 programExerciseName,
                 reps,
                 weight,
+                programExerciseType,
             } = item.exerciseDetails;
 
             let setLimit = parseInt(sets);
@@ -520,6 +529,7 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
 
             for (let j = 0; j < setLimit; j++) {
                 setArray.push({
+                    programExerciseType,
                     programExerciseName: programExerciseName,
                     programExerciseId: programExerciseId,
                     currentSet: j + 1,
@@ -542,9 +552,11 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
                 cardioSeconds,
                 programExerciseName,
                 programExerciseId,
+                programExerciseType,
             } = item.exerciseDetails;
 
             resultSequence.push({
+                programExerciseType,
                 programExerciseName,
                 programExerciseId,
                 cardioMinutes,
