@@ -39,7 +39,14 @@ exports.getAllProgramExercises = handleAsync(async (req, res, next) => {
 
 exports.addNewProgramExercise = handleAsync(async (req, res, next) => {
     //Create options to add certain weight and units, and percentage of a certain weight. How would we input a maxweight we can take a percentage of?
-    const { programId, sets, reps, programExerciseName } = req.body;
+
+    const {
+        programExerciseType,
+        programId,
+        sets,
+        reps,
+        programExerciseName,
+    } = req.body;
     let { weight, unit } = req.body;
     const { _id, email } = req.user;
 
@@ -61,6 +68,7 @@ exports.addNewProgramExercise = handleAsync(async (req, res, next) => {
 
     existingUser.userPrograms[programTargetIndex].programExercises.push({
         programExerciseName,
+        programExerciseType,
         sets,
         reps,
         weight,
@@ -90,7 +98,12 @@ exports.addNewProgramExercise = handleAsync(async (req, res, next) => {
 
 exports.addNewProgramPyramidSet = handleAsync(async (req, res, next) => {
     //Create options to add certain weight and units, and percentage of a certain weight. How would we input a maxweight we can take a percentage of?
-    const { programId, programExerciseName, setObjectsArray } = req.body;
+    const {
+        programId,
+        programExerciseType,
+        programExerciseName,
+        setObjectsArray,
+    } = req.body;
     const { _id, email } = req.user;
 
     let existingUser = await User.findOne({
@@ -118,6 +131,7 @@ exports.addNewProgramPyramidSet = handleAsync(async (req, res, next) => {
 
     existingUser.userPrograms[programTargetIndex].programExercises.push({
         programExerciseName,
+        programExerciseType,
         setObjectsArray,
         dateAdded: existingUser.generateDateNow(),
         programExerciseId: existingUser.generateUuid(),
@@ -198,6 +212,7 @@ exports.deleteProgramExercise = handleAsync(async (req, res, next) => {
 
 exports.addNewRestPeriod = handleAsync(async (req, res, next) => {
     const { _id, email } = req.user;
+    const { programExerciseType } = req.body;
     let { restLengthMinute, restLengthSecond, programId } = req.body;
 
     if (restLengthMinute === null || restLengthMinute === '') {
@@ -220,6 +235,7 @@ exports.addNewRestPeriod = handleAsync(async (req, res, next) => {
 
     existingUser.userPrograms[programTargetIndex].programExercises.push({
         programExerciseName: 'Rest Period',
+        programExerciseType,
         restLengthMinute,
         restLengthSecond,
         restId: existingUser.generateUuid(),
