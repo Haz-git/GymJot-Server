@@ -193,6 +193,13 @@ router
     );
 
 router
+    .route('/programs/addnewprogramcardio')
+    .post(
+        passport.authenticate('jwt', { session: false }),
+        programExerciseControllers.addNewProgramCardio
+    );
+
+router
     .route('/programs/addnewprogrampyramidset')
     .post(
         passport.authenticate('jwt', { session: false }),
