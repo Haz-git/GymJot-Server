@@ -302,8 +302,8 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
         if (
             item.exerciseDetails !== undefined &&
             item.exerciseDetails !== null &&
-            item.exerciseDetails.programExerciseType ===
-                'NEW_PROGRAM_EXERCISE' &&
+            item.exerciseDetails.programExerciseType !==
+                'CARDIO_PROGRAM_EXERCISE' &&
             item.exerciseDetails.setObjectsArray === undefined &&
             item.exerciseDetails.numRest !== undefined &&
             item.exerciseDetails.numRest !== null
