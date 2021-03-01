@@ -302,6 +302,8 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
         if (
             item.exerciseDetails !== undefined &&
             item.exerciseDetails !== null &&
+            item.exerciseDetails.programExerciseType ===
+                'NEW_PROGRAM_EXERCISE' &&
             item.exerciseDetails.setObjectsArray === undefined &&
             item.exerciseDetails.numRest !== undefined &&
             item.exerciseDetails.numRest !== null
@@ -362,6 +364,8 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
             resultSequence.push(arrayCombined);
         } else if (
             item.exerciseDetails !== undefined &&
+            item.exerciseDetails.programExerciseType ===
+                'PYRAMID_PROGRAM_EXERCISE' &&
             item.exerciseDetails.numRest === undefined &&
             item.exerciseDetails !== null &&
             item.exerciseDetails.setObjectsArray !== undefined
@@ -401,6 +405,8 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
             resultSequence.push(setArray);
         } else if (
             item.exerciseDetails !== undefined &&
+            item.exerciseDetails.programExerciseType ===
+                'PYRAMID_PROGRAM_EXERCISE' &&
             item.exerciseDetails.numRest !== undefined &&
             item.exerciseDetails !== null &&
             item.exerciseDetails.setObjectsArray !== undefined
@@ -474,7 +480,9 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
             resultSequence.push(arrayCombined);
         } else if (
             item.restDetails !== undefined &&
-            item.restDetails !== null
+            item.restDetails !== null &&
+            item.restDetails.programExerciseType ===
+                'REST_PERIOD_PROGRAM_EXERCISE'
         ) {
             //Support for rest periods:
 
@@ -495,7 +503,7 @@ userSchema.methods.generateProgramSequence = function (formattedProgramArray) {
             item.exerciseDetails !== undefined &&
             item.exerciseDetails.restNum === undefined
         ) {
-            //Support for single set exercises or exercises without rest between sets
+            //Support for single set exercises or exercises without rest between sets -- This should be applicable to any program exercise, such as main lift, stats, new exercise, and pyramid set. Therefore, there is no check for programExerciseType.
 
             const {
                 sets,
