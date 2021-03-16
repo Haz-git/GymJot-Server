@@ -395,11 +395,11 @@ exports.addRestPeriodsBetweenSets = handleAsync(async (req, res, next) => {
 
     //Test if restLengthMinute or restLengthSeconds are null. If they are, then convert them to 0.
 
-    if (restLengthMinute === null) {
+    if (restLengthMinute === null || restLengthMinute === '') {
         restLengthMinute = '0';
     }
 
-    if (restLengthSecond === null) {
+    if (restLengthSecond === null || restLengthSecond === '') {
         restLengthSecond = '0';
     }
 
