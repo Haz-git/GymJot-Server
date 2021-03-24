@@ -10,8 +10,29 @@ const throwAppError = require('../util/throwAppError');
 //Grabs a user's record data
 exports.getUserRecordData = handleAsync(async (req, res, next) => {
     //Before designing this, check out the comment on addNewRecord. Maybe a redesign on just solely 'weights' and a lbs or kg selector will be better.
+
+    const { _id, email } = req.user;
+    const { exerciseId } = req.body;
+
+    //Find User
+
+    let existingUser = await User.findOne({
+        _id: _id,
+        email: email,
+    });
+
+    //Find Index for exercise:
+
+    const statTargetIndex = existingUser.findExerciseIndex(
+        exerciseId,
+        existingUser.userSavedStats
+    );
+
+    const userRecordData = existingUser.userSavedStats[statTargetIndex].records;
+
     res.status(200).json({
-        message: 'This route grabs the user record data',
+        message: 'Returned all record data for desired exercise.',
+        statRecords: userRecordData,
     });
 });
 
