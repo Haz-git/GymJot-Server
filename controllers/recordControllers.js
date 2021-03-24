@@ -90,13 +90,11 @@ exports.addNewRecord = handleAsync(async (req, res, next) => {
 
     //Find and send the updated user.
 
-    const updatedUser = await User.findOne({ _id: _id, email: email }).select(
-        'userSavedStats'
-    );
+    const updatedUser = await User.findOne({ _id: _id, email: email });
 
     res.status(200).json({
         message: 'Record has successfully been added.',
-        userSavedStats: updatedUser.userSavedStats,
+        userUpdatedRecords: updatedUser.userSavedStats[targetIndex].records,
     });
 });
 
@@ -137,7 +135,7 @@ exports.editRecord = handleAsync(async (req, res, next) => {
 
     res.status(200).json({
         message: 'Record has successfully been added.',
-        userSavedStats: editedRecord,
+        userUpdatedRecords: editedRecord,
     });
 });
 
@@ -176,12 +174,10 @@ exports.deleteRecord = handleAsync(async (req, res, next) => {
         }
     );
 
-    const updatedUser = await User.findOne({ _id: _id, email: email }).select(
-        'userSavedStats'
-    );
+    const updatedUser = await User.findOne({ _id: _id, email: email });
 
     res.status(200).json({
-        message: 'Record has successfully been deleted',
-        userSavedStats: updatedUser.userSavedStats,
+        message: 'Record has successfully been added.',
+        userUpdatedRecords: updatedUser.userSavedStats[statDeleteIndex].records,
     });
 });
