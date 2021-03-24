@@ -179,6 +179,12 @@ userSchema.methods.findExerciseIndex = function (exerciseId, array) {
     return index;
 };
 
+userSchema.methods.findRecordIndex = function (recordId, array) {
+    let index = array.findIndex((object) => object.recordId === recordId);
+
+    return index;
+};
+
 //Finds the user's program index number in the program array:
 
 userSchema.methods.findProgramIndex = function (programId, array) {
@@ -228,7 +234,7 @@ userSchema.methods.findAndEditRecord = function (
             editValues[property];
     }
 
-    console.log(user.userSavedStats[exerciseIndex].records[recordIndex]);
+    console.log(user.userSavedStats[exerciseIndex].records);
 
     return user.userSavedStats;
 };
