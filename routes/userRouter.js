@@ -113,7 +113,7 @@ router
 
 router
     .route('/stat/getallrecords')
-    .get(
+    .post(
         passport.authenticate('jwt', { session: false }),
         recordControllers.getUserRecordData
     );
