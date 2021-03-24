@@ -133,9 +133,20 @@ exports.editRecord = handleAsync(async (req, res, next) => {
         dateModified,
     });
 
+    await User.updateOne(
+        { _id: _id, email: email },
+        { userSavedStats: editedRecord },
+        { bypassDocumentValidation: true },
+        (err) => {
+            if (err) console.log(err);
+        }
+    );
+
+    const updatedUser = await User.findOne({ _id: _id, email: email });
+
     res.status(200).json({
-        message: 'Record has successfully been added.',
-        userUpdatedRecords: editedRecord,
+        message: 'Record has been successfully edited',
+        userUpdatedRecords: updatedUser.userSavedStats[targetIndex].records,
     });
 });
 
@@ -153,7 +164,7 @@ exports.deleteRecord = handleAsync(async (req, res, next) => {
         existingUser.userSavedStats
     );
 
-    const recordDeleteIndex = existingUser.findExerciseIndex(
+    const recordDeleteIndex = existingUser.findRecordIndex(
         recordId,
         existingUser.userSavedStats[statDeleteIndex].records
     );
