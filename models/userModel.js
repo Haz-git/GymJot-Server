@@ -230,11 +230,14 @@ userSchema.methods.findAndEditRecord = function (
     );
 
     for (const property in editValues) {
-        user.userSavedStats[exerciseIndex].records[recordIndex][`${property}`] =
-            editValues[property];
+        if (editValues[property] !== '') {
+            user.userSavedStats[exerciseIndex].records[recordIndex][
+                `${property}`
+            ] = editValues[property];
+        }
     }
 
-    console.log(user.userSavedStats[exerciseIndex].records);
+    // console.log(user.userSavedStats[exerciseIndex].records);
 
     return user.userSavedStats;
 };
