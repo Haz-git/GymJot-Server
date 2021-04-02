@@ -176,6 +176,13 @@ router
         programControllers.increaseProgramRunCount
     );
 
+router
+    .route('/addnewprogramtimelength')
+    .post(
+        passport.authenticate('jwt', { session: false }),
+        programControllers.editProgramTimeLength
+    );
+
 //Program Exercise Routes (under programs) \\\\\\\\\\\\\\\\:
 
 router
