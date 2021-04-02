@@ -252,11 +252,11 @@ exports.editProgramTimeLength = handleAsync(async (req, res, next) => {
         existingUser.userPrograms
     );
 
-    if (totalTime !== undefined && totalTime !== null) {
-        existingUser.userPrograms[programIndex][
-            'programTimeLength'
-        ] = totalTime.toString();
-    }
+    const convertedTime = totalTime.toString();
+
+    existingUser.userPrograms[programIndex][
+        'programTimeLength'
+    ] = convertedTime;
 
     await User.updateOne(
         { _id: _id, email: email },
