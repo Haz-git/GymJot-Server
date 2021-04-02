@@ -267,5 +267,7 @@ exports.editProgramTimeLength = handleAsync(async (req, res, next) => {
         }
     );
 
-    //No response needed to be sent.
+    res.status(200).json({
+        msg: 'Program time length has been updated successfully',
+    });
 });
