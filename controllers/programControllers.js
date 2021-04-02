@@ -235,3 +235,37 @@ exports.increaseProgramRunCount = handleAsync(async (req, res, next) => {
         });
     }
 });
+
+exports.editProgramTimeLength = handleAsync(async (req, res, next) => {
+    //The totalTime is in seconds.
+    const { programId } = req.body;
+    let { totalTime } = req.body;
+    const { _id, email } = req.user;
+
+    let existingUser = await User.findOne({
+        _id: _id,
+        email: email,
+    });
+
+    const programIndex = existingUser.findProgramIndex(
+        programId,
+        existingUser.userPrograms
+    );
+
+    if (totalTime !== undefined && totalTime !== null) {
+        existingUser.userPrograms[programIndex][
+            'programTimeLength'
+        ] = totalTime.toString();
+    }
+
+    await User.updateOne(
+        { _id: _id, email: email },
+        { userPrograms: existingUser.userPrograms },
+        { bypassDocumentValidation: true },
+        (err) => {
+            if (err) console.log(err);
+        }
+    );
+
+    //No response needed to be sent.
+});
