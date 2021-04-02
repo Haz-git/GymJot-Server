@@ -23,7 +23,7 @@ app.use(helmet());
 //Rate-limiting: Limit requests to API from IP
 const limiter = rateLimit({
     //Allow 1000 requests from same IP in one hour:
-    max: 1000,
+    max: 5000,
     windowMs: 60 * 60 * 100,
     message: 'Too many requests from this IP, please try again in an hour.',
 });
