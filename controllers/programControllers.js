@@ -26,7 +26,7 @@ exports.getAllPrograms = handleAsync(async (req, res, next) => {
 //Adds a new program to the user's program list.
 
 exports.addNewProgram = handleAsync(async (req, res, next) => {
-    const { programName, programDesc } = req.body;
+    const { programName, programDesc, tutorialId } = req.body;
     const { _id, email } = req.user;
 
     let userExistingPrograms = await User.findOne({
@@ -34,13 +34,23 @@ exports.addNewProgram = handleAsync(async (req, res, next) => {
         email: email,
     }).select('userPrograms');
 
-    userExistingPrograms.userPrograms.push({
-        programName,
-        programDesc,
-        dateCreated: userExistingPrograms.generateDateNow(),
-        programId: userExistingPrograms.generateUuid(),
-        programExercises: [],
-    });
+    if (tutorialId !== undefined && tutorialId !== null) {
+        userExistingPrograms.userPrograms.push({
+            programName,
+            programDesc,
+            dateCreated: userExistingPrograms.generateDateNow(),
+            programId: tutorialId,
+            programExercises: [],
+        });
+    } else {
+        userExistingPrograms.userPrograms.push({
+            programName,
+            programDesc,
+            dateCreated: userExistingPrograms.generateDateNow(),
+            programId: userExistingPrograms.generateUuid(),
+            programExercises: [],
+        });
+    }
 
     await User.updateOne(
         { _id: _id, email: email },
