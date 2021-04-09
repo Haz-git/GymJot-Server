@@ -105,7 +105,7 @@ exports.deleteExistingStat = handleAsync(async (req, res, next) => {
 exports.addNewStat = handleAsync(async (req, res, next) => {
     //We'll be extracting details from req.body and req.user.
 
-    const { exerciseName } = req.body;
+    const { exerciseName, tutorialStatId } = req.body;
     const { _id, email } = req.user;
 
     //Find the user's existing stats array based on matching userID and email.
@@ -115,13 +115,23 @@ exports.addNewStat = handleAsync(async (req, res, next) => {
         email: email,
     }).select('userSavedStats');
 
-    //Push new object created with Schema methods.
-    userExistingSavedStats.userSavedStats.push({
-        exerciseName: exerciseName,
-        dateUpdated: userExistingSavedStats.generateDateNow(),
-        exerciseId: userExistingSavedStats.generateUuid(),
-        records: [],
-    });
+    //Push new object created with Schema methods. Check if tutorialStatId is present. We need a known tutorial stat id.
+
+    if (tutorialStatId !== undefined && tutorialStatId !== null) {
+        userExistingSavedStats.userSavedStats.push({
+            exerciseName: exerciseName,
+            dateUpdated: userExistingSavedStats.generateDateNow(),
+            exerciseId: tutorialStatId,
+            records: [],
+        });
+    } else {
+        userExistingSavedStats.userSavedStats.push({
+            exerciseName: exerciseName,
+            dateUpdated: userExistingSavedStats.generateDateNow(),
+            exerciseId: userExistingSavedStats.generateUuid(),
+            records: [],
+        });
+    }
 
     //Update the user.
 
